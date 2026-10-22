@@ -1,8 +1,5 @@
 name: Build Flet APK
 
-env:
-  FLET_CLI_NO_RICH_OUTPUT: 1
-
 on:
   push:
     branches: [ main ]
@@ -14,16 +11,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Flet
+        run: pip install flet
+
       - name: Build APK
         id: build
-        uses: flet-dev/flet-build-action@v1
-        with:
-          target: apk
-          build-number: ${{ github.run_number }}
+        run: |
+          flet build apk --no-rich-output
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: flet-apk
-          path: ${{ steps.build.outputs.archive-path }}
+          path: build/apk/*.apk
           if-no-files-found: error
