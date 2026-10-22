@@ -8,30 +8,21 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      FLET_CLI_NO_RICH_OUTPUT: 1
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install Flet CLI
-        run: |
-          python -m pip install --upgrade pip
-          pip install flet-cli
+      - uses: actions/checkout@v4
 
       - name: Build APK
-        env:
-          FLET_CLI_NO_RICH_OUTPUT: 1
-          PYTHONUTF8: 1
-        run: |
-          flet build apk --verbose
+        id: build
+        uses: flet-dev/flet-build-action@v1
+        with:
+          target: apk
+          build-number: ${{ github.run_number }}
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: flet-apk
-          path: build/apk/*.apk
+          path: ${{ steps.build.outputs.archive-path }}
           if-no-files-found: error
