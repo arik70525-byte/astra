@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Build output
+build/
+dist/
+*.spec.bak
+*.zip
+
+# Local data
+*.db
+*.db-wal
+*.db-shm
+settings.json
+vault.bin
+vault.key
+logs/
+
+# Android
+mobile_android/.gradle/
+mobile_android/build/
+mobile_android/app/build/
+mobile_android/local.properties
+mobile_android/.idea/
+*.apk
+*.aab
+*.jks
+*.keystore
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
