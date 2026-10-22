@@ -9,26 +9,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install Flet CLI
-        run: |
-          python -m pip install --upgrade pip
-          pip install flet
+      - uses: actions/checkout@v4
 
       - name: Build APK
-        run: |
-          flet build apk --no-rich-output
+        id: build
+        uses: flet-dev/flet-build-action@v1
+        with:
+          target: apk
+          build-number: ${{ github.run_number }}
+          args: --no-rich-output
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: flet-apk
-          path: build/apk/*.apk
+          path: ${{ steps.build.outputs.archive-path }}
           if-no-files-found: error
